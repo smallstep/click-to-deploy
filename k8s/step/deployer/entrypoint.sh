@@ -26,8 +26,6 @@ name="$(/bin/print_config.py \
 
 namespace=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
 
-STEPPATH=/home/step/.step
-
 CA_PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32 ; echo '')
 AUTOCERT_PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32 ; echo '')
 

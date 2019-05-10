@@ -12,7 +12,7 @@ ENV KUBE_LATEST_VERSION="v1.14.0"
 ENV STEP_VERSION="0.10.0"
 
 ENV STEP="/home/step"
-ENV STEPPATH="/home/step"
+ENV STEPPATH="/home/step/.step"
 ENV STEPDEBUG="1"
 ENV CONFIGPATH="/home/step/config/ca.json"
 
