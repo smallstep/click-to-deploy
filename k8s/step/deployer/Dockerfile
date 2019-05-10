@@ -23,18 +23,14 @@ RUN addgroup --gid 1000 step \
 
 RUN curl -L https://raw.githubusercontent.com/smallstep/certificates/v${STEP_VERSION}/autocert/install/01-step-ca.yaml -o /data/manifest/01-step-ca.yaml.template
 RUN curl -L https://raw.githubusercontent.com/smallstep/certificates/v${STEP_VERSION}/autocert/install/02-autocert.yaml -o /data/manifest/02-autocert.yaml.template
-RUN curl -L https://raw.githubusercontent.com/smallstep/certificates/v${STEP_VERSION}/autocert/install/03-rbac.yaml -o /data/manifest/03-rbac.yaml.template
-#RUN cat /data/manifest/0*.yaml.template > /data/manifest/step.yaml.template
 
 RUN cat /data/manifest/01-step-ca.yaml.template > /data/manifest/step.yaml.template
 RUN echo "---" >> /data/manifest/step.yaml.template
 RUN cat /data/manifest/02-autocert.yaml.template >> /data/manifest/step.yaml.template
-#RUN echo "---" >> /data/manifest/step.yaml.template
-#RUN cat /data/manifest/03-rbac.yaml.template >> /data/manifest/step.yaml.template
 RUN rm -f /data/manifest/0*.yaml.template 
 
 RUN sed -i 's/namespace: step/namespace: $NAMESPACE/g' /data/manifest/step.yaml.template
-#RUN sed -i 's/name: default/name: $STEP_SERVICE_ACCOUNT/g' /data/manifest/step.yaml.template
+RUN sed -i 's/name: default/name: $STEP_SERVICE_ACCOUNT/g' /data/manifest/step.yaml.template
 
 USER step
 WORKDIR /home/step

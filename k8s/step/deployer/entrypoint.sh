@@ -26,6 +26,8 @@ name="$(/bin/print_config.py \
 
 namespace=$(cat /var/run/secrets/kubernetes.io/serviceaccount/namespace)
 
+STEPPATH=/home/step/.step
+
 CA_PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32 ; echo '')
 AUTOCERT_PASSWORD=$(head /dev/urandom | tr -dc A-Za-z0-9 | head -c 32 ; echo '')
 
@@ -58,6 +60,9 @@ kubectl --namespace ${namespace} create configmap secrets --from-file $(step pat
 kubectl --namespace ${namespace} create secret generic ca-password --from-literal "password=${CA_PASSWORD}"
 kubectl --namespace ${namespace} create secret generic autocert-password --from-literal "password=${AUTOCERT_PASSWORD}"
 
+# Some `base64`s wrap lines... no thanks!
+cat $(step path)/certs/root_ca.crt | base64 | tr -d '\n'
+
 FINGERPRINT=$(step certificate fingerprint $(step path)/certs/root_ca.crt)
 
 echo
@@ -70,11 +75,6 @@ echo "  CA Fingerprint: ${FINGERPRINT}"
 echo
 
 /bin/deploy-original.sh
-
-echo "manifest: "
-cat /data/resources.yaml
-echo ""
-echo ""
 
 NAME="$(/bin/print_config.py \
     --xtype NAME \

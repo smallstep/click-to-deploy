@@ -51,5 +51,6 @@ spec:
     kind: Namespace
   - group: v1
     kind: ConfigMap
-
+  - group: v1
+    kind: Secret
 ---

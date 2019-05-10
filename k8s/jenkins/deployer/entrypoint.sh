@@ -61,4 +61,4 @@ NAMESPACE="$(/bin/print_config.py \
     --values_mode raw)"
 export NAME
 export NAMESPACE
-/bin/clean_iam_resources-original.sh
+#/bin/clean_iam_resources-original.sh
