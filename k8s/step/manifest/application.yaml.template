@@ -53,4 +53,51 @@ spec:
     kind: ConfigMap
   - group: v1
     kind: Secret
+  notes: |-
+    # Setup Mutating Webhook
+
+    Make sure you have cluster admin privileges.
+    Set permissions by running the following command:
+
+    ```
+    kubectl create clusterrolebinding autocert-init-binding \
+      --clusterrole cluster-admin \
+      --user "system:serviceaccount:default:default"
+    ```
+
+    Configure mutating webhook running following command:
+
+    ```
+    cat <<EOF | kubectl apply -f -
+    apiVersion: admissionregistration.k8s.io/v1beta1
+    kind: MutatingWebhookConfiguration
+    metadata:
+      name: autocert-webhook-config
+      labels: {app: autocert}
+    webhooks:
+      - name: autocert.step.sm
+        clientConfig:
+          service:
+            name: autocert
+            namespace: step
+            path: "/mutate"
+          caBundle: $(kubectl get -n step configmaps ca-bundle -oyaml --output=jsonpath='{.data.ca-bundle}')
+        rules:
+          - operations: ["CREATE"]
+            apiGroups: [""]
+            apiVersions: ["v1"]
+            resources: ["pods"]
+        failurePolicy: Ignore
+        namespaceSelector:
+          matchLabels:
+            autocert.step.sm: enabled
+    EOF
+    ```
+
+    Once setup is complete you can remove this binding by running:
+
+    ```
+    kubectl delete clusterrolebinding autocert-init-binding
+    ```
+
 ---

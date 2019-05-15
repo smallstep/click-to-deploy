@@ -51,15 +51,16 @@ EOD
 echo
 echo -e "\e[1mPreparing environment...\e[0m"
 
+# Some `base64`s wrap lines... no thanks!
+CA_BUNDLE=$(cat $(step path)/certs/root_ca.crt | base64 | tr -d '\n')
+
 kubectl --namespace ${namespace} create configmap config --from-file $(step path)/config
 kubectl --namespace ${namespace} create configmap certs --from-file $(step path)/certs
 kubectl --namespace ${namespace} create configmap secrets --from-file $(step path)/secrets
+kubectl --namespace ${namespace} create configmap ca-bundle --from-literal "ca-bundle=${CA_BUNDLE}"
 
 kubectl --namespace ${namespace} create secret generic ca-password --from-literal "password=${CA_PASSWORD}"
 kubectl --namespace ${namespace} create secret generic autocert-password --from-literal "password=${AUTOCERT_PASSWORD}"
-
-# Some `base64`s wrap lines... no thanks!
-cat $(step path)/certs/root_ca.crt | base64 | tr -d '\n'
 
 FINGERPRINT=$(step certificate fingerprint $(step path)/certs/root_ca.crt)
 

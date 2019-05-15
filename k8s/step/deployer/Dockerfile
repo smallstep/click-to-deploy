@@ -49,9 +49,6 @@ RUN curl -L https://github.com/smallstep/cli/releases/download/v${STEP_VERSION}/
 RUN curl -L https://github.com/smallstep/certificates/releases/download/v${STEP_VERSION}/step-certificates_${STEP_VERSION}_amd64.deb -o /home/step/step-certificates_${STEP_VERSION}_amd64.deb \
   && dpkg -i /home/step/step-certificates_${STEP_VERSION}_amd64.deb
 
-#COPY deployer/autocert.sh /home/step/
-#RUN chmod +x /home/step/autocert.sh
-
 RUN mv -f /bin/deploy.sh /bin/deploy-original.sh
 ADD deployer/entrypoint.sh /bin/deploy.sh
 
