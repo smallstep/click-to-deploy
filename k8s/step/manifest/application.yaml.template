@@ -100,4 +100,36 @@ spec:
     kubectl delete clusterrolebinding autocert-init-binding
     ```
 
+    # Enable Autocert for Namespaces
+
+    To enable autocert for a namespace it must be labelled autocert.step.sm=enabled.
+    To label the default namespace run:
+
+    ```
+    kubectl label namespace default autocert.step.sm=enabled
+    ```
+
+    To check which namespaces have autocert enabled run:
+
+    ```
+    $ kubectl get namespace -L autocert.step.sm
+    NAME          STATUS   AGE   AUTOCERT.STEP.SM
+    default       Active   59m   enabled
+    ...
+    ```
+
+    # Access to CA / provisioner secrets
+
+    Run following command to get the root CA key's password:
+
+    ```
+    kubectl get -n step secrets ca-password -ojson --output=jsonpath='{.data.password}' | base64 --decode
+    ```
+
+    Similarly run following command to get the autocert provisioner key's password:
+
+    ```
+    kubectl get -n step secrets autocert-password -ojson --output=jsonpath='{.data.password}' | base64 --decode
+    ```
+
 ---
