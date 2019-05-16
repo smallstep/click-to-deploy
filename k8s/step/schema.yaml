@@ -15,18 +15,6 @@ properties:
     default: $REGISTRY:$TAG
     x-google-marketplace:
       type: IMAGE
-  STEP_CA_PWD:
-    type: string
-    x-google-marketplace:
-      type: GENERATED_PASSWORD
-      generatedPassword:
-        length: 32
-  STEP_AUTOCERT_PWD:
-    type: string
-    x-google-marketplace:
-      type: GENERATED_PASSWORD
-      generatedPassword:
-        length: 32
   STEP_SERVICE_ACCOUNT:
     type: string
     title: Step Service Account
@@ -42,6 +30,4 @@ required:
 - APP_INSTANCE_NAME
 - NAMESPACE
 - IMAGE_STEP
-- STEP_CA_PWD
-- STEP_AUTOCERT_PWD
 - STEP_SERVICE_ACCOUNT
